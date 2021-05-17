@@ -14,7 +14,7 @@ from datetime           import datetime
 def mynow(): return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 # Log System imports
-print(f'{mynow()} [core] System   imports [✓]')
+print(f'{mynow()} [core] System imports [✓]')
 
 # Redis variables
 REDIS_HOST    = os.environ['SEP_BACKEND_REDIS_SVC_SERVICE_HOST']
@@ -22,6 +22,7 @@ REDIS_PORT    = os.environ['SEP_BACKEND_REDIS_SVC_SERVICE_PORT']
 REDIS_DB_NAME = os.environ['SEP_REDIS_DB']
 # Subscriber pattern
 SUB_PATH      = os.environ['SEP_REDIS_SUB_PATH']
+VERBOSE       = os.environ['SEP_REDIS_SUB_VERBOSE']
 
 # Opening Redis connection
 try:
@@ -34,16 +35,15 @@ except:
 else:
     print(f'{mynow()} [core] Connection to redis:{REDIS_DB_NAME} [✓]')
 
-
 # Starting subscription
 try:
     pubsub = r.pubsub()
     pubsub.psubscribe(SUB_PATH)
 except:
-    print(f'{mynow()} [core] Subscribe to redis:"{SUB_PATH}" [✗]')
+    print(f'{mynow()} [core] Subscription to redis:"{SUB_PATH}" [✗]')
 else:
-    print(f'{mynow()} [core] Subscribe to redis:"{SUB_PATH}" [✓]')
+    print(f'{mynow()} [core] Subscription to redis:"{SUB_PATH}" [✓]')
 
 # We receive the events from Redis
 for msg in pubsub.listen():
-    print(mynow(), msg)
+    if VERBOSE: print(f'{mynow()} [verbose] {msg}')
