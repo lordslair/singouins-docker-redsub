@@ -14,39 +14,39 @@ from datetime           import datetime
 def mynow(): return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 # Log System imports
-print(f'{mynow()} [core] System imports [✓]')
+print(f'{mynow()} [DB:*][core] [✓] System imports')
 
 # Redis variables
 REDIS_HOST    = os.environ['SEP_BACKEND_REDIS_SVC_SERVICE_HOST']
 REDIS_PORT    = os.environ['SEP_BACKEND_REDIS_SVC_SERVICE_PORT']
-REDIS_DB_NAME = os.environ['SEP_REDIS_DB']
+REDIS_DB      = os.environ['SEP_REDIS_DB']
 # Subscriber pattern
 SUB_PATH      = os.environ['SEP_REDIS_SUB_PATH']
-VERBOSE       = os.environ['SEP_REDIS_SUB_VERBOSE']
+VERBOSE       = eval(os.environ['SEP_REDIS_SUB_VERBOSE'])
 
 # Opening Redis connection
 try:
     r = Redis(host     = REDIS_HOST,
               port     = REDIS_PORT,
-              db       = REDIS_DB_NAME,
+              db       = REDIS_DB,
               encoding = 'utf-8')
 except:
-    print(f'{mynow()} [core] Connection to redis:{REDIS_DB_NAME} [✗]')
+    print(f'{mynow()} [DB:{REDIS_DB}][core] [✗] Connection to Redis')
 else:
-    print(f'{mynow()} [core] Connection to redis:{REDIS_DB_NAME} [✓]')
+    print(f'{mynow()} [DB:{REDIS_DB}][core] [✓] Connection to Redis')
 
 # Starting subscription
 try:
     pubsub = r.pubsub()
     pubsub.psubscribe(SUB_PATH)
 except:
-    print(f'{mynow()} [core] Subscription to redis:"{SUB_PATH}" [✗]')
+    print(f'{mynow()} [DB:{REDIS_DB}][core] [✗] Subscription to Redis:"{SUB_PATH}"')
 else:
-    print(f'{mynow()} [core] Subscription to redis:"{SUB_PATH}" [✓]')
+    print(f'{mynow()} [DB:{REDIS_DB}][core] [✓] Subscription to Redis:"{SUB_PATH}"')
 
 # We receive the events from Redis
 for msg in pubsub.listen():
-    if VERBOSE: print(f'{mynow()} [verbose] {msg}')
+    if VERBOSE: print(f'{mynow()} [DB:{REDIS_DB}][verbose] {msg}')
 
     # Detect the action which triggered the event
     m = re.search(r":(?P<action>\w+)", msg['channel'].decode('utf-8'))
@@ -57,4 +57,4 @@ for msg in pubsub.listen():
     action = m.group('action')
     if action == 'expired':
         key = msg['data'].decode('utf-8')
-        print(f'{mynow()} [expired] {key}')
+        print(f'{mynow()} [DB:{REDIS_DB}][expired] {key}')
