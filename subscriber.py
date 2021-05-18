@@ -5,7 +5,7 @@
 # redis-cli> config set notify-keyspace-events s$xE
 
 import os
-import time
+import re
 
 from redis              import Redis
 from datetime           import datetime
@@ -47,3 +47,14 @@ else:
 # We receive the events from Redis
 for msg in pubsub.listen():
     if VERBOSE: print(f'{mynow()} [verbose] {msg}')
+
+    # Detect the action which triggered the event
+    m = re.search(r":(?P<action>\w+)", msg['channel'].decode('utf-8'))
+    if m is None:
+        # If no action detected, we skip processing
+        continue
+
+    action = m.group('action')
+    if action == 'expired':
+        key = msg['data'].decode('utf-8')
+        print(f'{mynow()} [expired] {key}')
