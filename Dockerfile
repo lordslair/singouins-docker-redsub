@@ -20,8 +20,8 @@ RUN apk update --no-cache \
     && apk del .build-deps \
     && rm /requirements.txt
 
-    USER redsub
-    WORKDIR /code
-    ENV PATH="/code/.local/bin:${PATH}"
+USER redsub
+WORKDIR /code
+ENV PATH="/code/.local/bin:${PATH}"
 
 ENTRYPOINT ["/code/subscriber.py"]
