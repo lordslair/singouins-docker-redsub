@@ -6,6 +6,8 @@
 #
 deprecated==1.2.13
     # via redis
+loguru==0.6.0
+    # via -r ./requirements.in
 packaging==21.3
     # via redis
 pyparsing==3.0.7

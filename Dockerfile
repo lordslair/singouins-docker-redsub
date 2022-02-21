@@ -6,6 +6,12 @@ RUN adduser -h /code -u 1000 -D -H redsub
 ENV PIP_NO_CACHE_DIR=1
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
+ENV LOGURU_COLORIZE='true'
+ENV LOGURU_DEBUG_COLOR='<cyan><bold>'
+
+ENV PYTHONUNBUFFERED='True'
+ENV PYTHONIOENCODING='UTF-8'
+
 COPY                       requirements.txt /requirements.txt
 COPY --chown=redsub:redsub subscriber.py     /code/subscriber.py
 
