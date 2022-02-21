@@ -22,10 +22,12 @@ SUB_PATH      = os.environ['SEP_REDIS_SUB_PATH']
 
 # Opening Redis connection
 try:
-    r = Redis(host     = REDIS_HOST,
-              port     = REDIS_PORT,
-              db       = REDIS_DB,
-              encoding = 'utf-8')
+    r = Redis(host                   = REDIS_HOST,
+              port                   = REDIS_PORT,
+              db                     = REDIS_DB,
+              encoding               = 'utf-8',
+              decode_responses       = True,
+              socket_connect_timeout = 1)
 except (exceptions.ConnectionError,
         exceptions.BusyLoadingError):
     logger.error(f'[DB:{REDIS_DB}][core] [✗] Connection to Redis')
