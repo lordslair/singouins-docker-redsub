@@ -6,6 +6,8 @@
 #
 deprecated==1.2.13
     # via redis
+importlib-metadata==4.11.1
+    # via redis
 loguru==0.6.0
     # via -r ./requirements.in
 packaging==21.3
@@ -13,6 +15,10 @@ packaging==21.3
 pyparsing==3.0.7
     # via packaging
 redis==4.1.4
-    # via -r requirements.in
+    # via -r ./requirements.in
+typing-extensions==4.1.1
+    # via importlib-metadata
 wrapt==1.13.3
     # via deprecated
+zipp==3.7.0
+    # via importlib-metadata

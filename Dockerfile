@@ -22,7 +22,7 @@ RUN apk update --no-cache \
     && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime \
     && cd /code \
     && su redsub -c "python3 -m ensurepip --upgrade \
-                     && /code/.local/bin/pip install --user -U -r /requirements.txt" \
+                     && /code/.local/bin/pip3 install --user -U -r /requirements.txt" \
     && apk del .build-deps \
     && rm /requirements.txt
 
