@@ -16,13 +16,13 @@ COPY                       requirements.txt /requirements.txt
 COPY --chown=redsub:redsub subscriber.py     /code/subscriber.py
 
 RUN apk update --no-cache \
-    && apk add --no-cache python3 py3-pip \
+    && apk add --no-cache python3 \
     && apk add --no-cache --virtual .build-deps \
                                     tzdata \
-    && pip install -U -r /requirements.txt \
     && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime \
     && cd /code \
-    && su redsub -c "pip install --user -U -r /requirements.txt" \
+    && su redsub -c "python3 -m ensurepip --upgrade \
+                     && /code/.local/bin/pip install --user -U -r /requirements.txt" \
     && apk del .build-deps \
     && rm /requirements.txt
 
