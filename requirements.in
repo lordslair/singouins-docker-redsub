@@ -1,2 +1,2 @@
 loguru ~= 0.6
-redis  ~= 4.1
+redis  ~= 4.3
